@@ -570,8 +570,7 @@ async def generate_synthetic_fintech_dataset(db: AsyncSession, force_refresh: bo
         db.add(ev)
 
     # ----------------------------------------------------
-    # 7. SCENARIO 3: NORMAL VERIFIED TRANSACTION
-    # TXN-23A91B | ৳850 | Shwapno Superstore | Risk: LOW (5.0) | Status: SUCCESS
+    # 7. SCENARIO 3 & 20 DUMMY TRANSACTIONS FOR USR-001
     # ----------------------------------------------------
     s3_time = base_time - datetime.timedelta(hours=4, minutes=12)
     txn_s3 = Transaction(
@@ -654,6 +653,247 @@ async def generate_synthetic_fintech_dataset(db: AsyncSession, force_refresh: bo
     ]
     for ev in events_s3:
         db.add(ev)
+
+    # Add 17 additional realistic dummy transactions for USR-001 (bringing total dummy transactions for USR-001 to 20)
+    extra_dummy_txns = [
+        {
+            "id": "TXN-101A01",
+            "type": "MOBILE_RECHARGE",
+            "amount": 500.0,
+            "status": "SUCCESS",
+            "channel": "APP",
+            "location": "Banani, Dhaka",
+            "gateway_id": "GW-CITY-PG",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(hours=5),
+            "meta_info": {"operator": "Grameenphone", "recipient_phone": "+8801711223344", "package": "Unlimited Internet 5GB"}
+        },
+        {
+            "id": "TXN-101A02",
+            "type": "CASH_IN",
+            "amount": 5000.0,
+            "status": "SUCCESS",
+            "channel": "AGENT",
+            "location": "Banani Agent Point, Dhaka",
+            "gateway_id": "GW-MTB-SWITCH",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(hours=10),
+            "meta_info": {"agent_id": "AGT-88219", "agent_name": "Banani Telecom & Cash Point", "commission_bdt": 10.0}
+        },
+        {
+            "id": "TXN-101A03",
+            "type": "UTILITY_BILL",
+            "amount": 3420.0,
+            "status": "SUCCESS",
+            "channel": "APP",
+            "location": "Banani, Dhaka",
+            "gateway_id": "GW-CITY-PG",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(hours=18),
+            "meta_info": {"biller": "DESCO Electricity", "account_no": "DESCO-9928172", "billing_month": "September 2026"}
+        },
+        {
+            "id": "TXN-101A04",
+            "type": "SEND_MONEY",
+            "amount": 1200.0,
+            "status": "SUCCESS",
+            "channel": "APP",
+            "location": "Banani, Dhaka",
+            "gateway_id": "GW-MTB-SWITCH",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(days=1, hours=2),
+            "meta_info": {"recipient_phone": "+8801812345678", "recipient_name": "Tariqul Alam", "note": "Dinner bill split"}
+        },
+        {
+            "id": "TXN-101A05",
+            "type": "QR_PAYMENT",
+            "amount": 1850.0,
+            "status": "SUCCESS",
+            "channel": "QR",
+            "location": "Gulshan-2, Dhaka",
+            "gateway_id": "GW-CITY-PG",
+            "merchant_id": "MERCH-AGR-01",
+            "created_at": base_time - datetime.timedelta(days=1, hours=6),
+            "meta_info": {"qr_type": "BANGLA_QR", "counter": "Counter #3", "items_count": 8}
+        },
+        {
+            "id": "TXN-101A06",
+            "type": "MERCHANT_PAYMENT",
+            "amount": 4500.0,
+            "status": "SUCCESS",
+            "channel": "APP",
+            "location": "Uttara Sector 3, Dhaka",
+            "gateway_id": "GW-CITY-PG",
+            "merchant_id": "MERCH-YEL-01",
+            "created_at": base_time - datetime.timedelta(days=2, hours=1),
+            "meta_info": {"invoice_no": "YEL-DH-8821", "cashback": 150.0}
+        },
+        {
+            "id": "TXN-101A07",
+            "type": "CASH_OUT",
+            "amount": 2000.0,
+            "status": "SUCCESS",
+            "channel": "AGENT",
+            "location": "Gulshan Agent Point, Dhaka",
+            "gateway_id": "GW-MTB-SWITCH",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(days=2, hours=8),
+            "meta_info": {"agent_id": "AGT-90112", "charge_bdt": 29.0}
+        },
+        {
+            "id": "TXN-101A08",
+            "type": "UTILITY_BILL",
+            "amount": 890.0,
+            "status": "SUCCESS",
+            "channel": "APP",
+            "location": "Banani, Dhaka",
+            "gateway_id": "GW-CITY-PG",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(days=3, hours=3),
+            "meta_info": {"biller": "Dhaka WASA Water", "account_no": "WASA-771209"}
+        },
+        {
+            "id": "TXN-101A09",
+            "type": "QR_PAYMENT",
+            "amount": 650.0,
+            "status": "SUCCESS",
+            "channel": "QR",
+            "location": "Dhanmondi-27, Dhaka",
+            "gateway_id": "GW-CITY-PG",
+            "merchant_id": "MERCH-GLO-01",
+            "created_at": base_time - datetime.timedelta(days=3, hours=9),
+            "meta_info": {"order_type": "Dine In", "item": "Cappuccino & Muffin"}
+        },
+        {
+            "id": "TXN-101A10",
+            "type": "SEND_MONEY",
+            "amount": 3500.0,
+            "status": "FAILED",
+            "channel": "APP",
+            "location": "Banani, Dhaka",
+            "gateway_id": "GW-BRAC-SWITCH",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(days=4, hours=2),
+            "meta_info": {"recipient_phone": "+8801900112233", "error": "INSUFFICIENT_FUNDS_OR_LIMIT"}
+        },
+        {
+            "id": "TXN-101A11",
+            "type": "MERCHANT_PAYMENT",
+            "amount": 2990.0,
+            "status": "SUCCESS",
+            "channel": "APP",
+            "location": "Elephant Road, Dhaka",
+            "gateway_id": "GW-CITY-PG",
+            "merchant_id": "MERCH-BAT-01",
+            "created_at": base_time - datetime.timedelta(days=4, hours=7),
+            "meta_info": {"receipt_no": "BATA-ER-9012"}
+        },
+        {
+            "id": "TXN-101A12",
+            "type": "CREDIT_CARD_BILL",
+            "amount": 12500.0,
+            "status": "SUCCESS",
+            "channel": "BANK_TRANSFER",
+            "location": "Banani, Dhaka",
+            "gateway_id": "GW-MTB-SWITCH",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(days=5, hours=4),
+            "meta_info": {"bank": "City Bank Visa Card", "card_last4": "4891"}
+        },
+        {
+            "id": "TXN-101A13",
+            "type": "MOBILE_RECHARGE",
+            "amount": 200.0,
+            "status": "SUCCESS",
+            "channel": "APP",
+            "location": "Banani, Dhaka",
+            "gateway_id": "GW-CITY-PG",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(days=5, hours=10),
+            "meta_info": {"operator": "Banglalink", "recipient_phone": "+8801911998877"}
+        },
+        {
+            "id": "TXN-101A14",
+            "type": "CASH_IN",
+            "amount": 10000.0,
+            "status": "SUCCESS",
+            "channel": "BANK_TRANSFER",
+            "location": "Banani, Dhaka",
+            "gateway_id": "GW-MTB-SWITCH",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(days=6, hours=1),
+            "meta_info": {"bank_name": "BRAC Bank Limited", "account_last4": "9012"}
+        },
+        {
+            "id": "TXN-101A15",
+            "type": "UTILITY_BILL",
+            "amount": 1080.0,
+            "status": "SUCCESS",
+            "channel": "APP",
+            "location": "Banani, Dhaka",
+            "gateway_id": "GW-CITY-PG",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(days=6, hours=5),
+            "meta_info": {"biller": "Titas Gas Prepaid", "meter_no": "TITAS-44912"}
+        },
+        {
+            "id": "TXN-101A16",
+            "type": "QR_PAYMENT",
+            "amount": 18500.0,
+            "status": "SUCCESS",
+            "channel": "QR",
+            "location": "Agargaon, Dhaka",
+            "gateway_id": "GW-CITY-PG",
+            "merchant_id": "MERCH-RYA-01",
+            "created_at": base_time - datetime.timedelta(days=7, hours=2),
+            "meta_info": {"item": "Dell 27-inch 4K Monitor", "warranty_months": 36}
+        },
+        {
+            "id": "TXN-101A17",
+            "type": "CASH_OUT",
+            "amount": 5000.0,
+            "status": "SUCCESS",
+            "channel": "ATM",
+            "location": "Banani BRAC Bank ATM, Dhaka",
+            "gateway_id": "GW-MTB-SWITCH",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(days=7, hours=9),
+            "meta_info": {"atm_id": "ATM-BRAC-BNN-02", "charge_bdt": 50.0}
+        },
+        {
+            "id": "TXN-101A18",
+            "type": "SALARY_DISBURSEMENT",
+            "amount": 45000.0,
+            "status": "SUCCESS",
+            "channel": "BANK_TRANSFER",
+            "location": "Banani Corporate Hub, Dhaka",
+            "gateway_id": "GW-CITY-PG",
+            "merchant_id": None,
+            "created_at": base_time - datetime.timedelta(days=8, hours=1),
+            "meta_info": {"disburser": "Upay Tech Hub Ltd", "reference": "SALARY-SEP-2026"}
+        }
+    ]
+
+
+    for item in extra_dummy_txns:
+        t_obj = Transaction(
+            id=item["id"],
+            user_id="USR-001",
+            merchant_id=item["merchant_id"],
+            type=item["type"],
+            amount=item["amount"],
+            currency="BDT",
+            status=item["status"],
+            channel=item["channel"],
+            device_id="DEV-IPHONE-14",
+            location=item["location"],
+            created_at=item["created_at"],
+            failure_code=None,
+            gateway_id=item["gateway_id"],
+            meta_info=item["meta_info"]
+        )
+        db.add(t_obj)
+
 
     # ----------------------------------------------------
     # 8. SCENARIO 4: SYSTEMIC GATEWAY OUTAGE CLUSTER

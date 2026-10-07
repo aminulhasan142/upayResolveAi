@@ -18,10 +18,12 @@ import {
   Bell,
   ArrowRight
 } from "lucide-react";
-import { formatBDT } from "@/lib/utils";
+import { formatBDT, getTransactionTitle } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SyntheticTransaction } from "@/types/synthetic";
+import { getEffectiveTransactions } from "@/lib/dummy-transactions";
+
 
 export type SplitMode = "EQUAL" | "CUSTOM" | "PERCENTAGE";
 export type MemberPaymentStatus = "PAID" | "PENDING" | "DECLINED";
@@ -52,7 +54,9 @@ interface SplitPaymentViewProps {
 }
 
 export const SplitPaymentView: React.FC<SplitPaymentViewProps> = ({ transactions = [] }) => {
+  const effectiveTransactions = getEffectiveTransactions(transactions);
   const [activeTab, setActiveTab] = useState<"ACTIVE_SPLIT" | "CREATE_SPLIT">("ACTIVE_SPLIT");
+
 
   // Canonical Initial Split matching the exact prompt demo scenario:
   // Dinner, Total ৳2,000, 4 people, Each ৳500
@@ -580,20 +584,22 @@ export const SplitPaymentView: React.FC<SplitPaymentViewProps> = ({ transactions
             </h4>
 
             {/* Quick transaction selector pills */}
-            {transactions.length > 0 && (
+            {effectiveTransactions.length > 0 && (
               <div className="space-y-1.5">
                 <span className="text-[11px] text-gray-500 font-medium block">
                   Select recent transaction to split:
                 </span>
                 <div className="flex items-center gap-2 overflow-x-auto pb-1">
-                  {transactions.slice(0, 3).map((txn) => (
+                  {effectiveTransactions.slice(0, 6).map((txn) => (
                     <button
                       key={txn.id}
                       type="button"
                       onClick={() => handleSelectTxn(txn)}
                       className="px-3 py-1.5 rounded-xl bg-surface-subtle hover:bg-emerald-50 hover:border-emerald-300 border border-surface-border text-xs text-left shrink-0 transition-all"
                     >
-                      <span className="font-bold text-gray-900 block">{txn.merchant_id || txn.type}</span>
+                      <span className="font-bold text-gray-900 block truncate max-w-[160px]">
+                        {getTransactionTitle(txn)}
+                      </span>
                       <span className="text-[11px] font-mono text-emerald-700 font-extrabold">{formatBDT(txn.amount)}</span>
                     </button>
                   ))}

@@ -141,14 +141,19 @@ async def get_user_transactions(
 ):
     """Retrieve personal ledger transactions for the authenticated mobile wallet user."""
     target_id = normalize_user_id(user_id)
-    repo = SyntheticRepository(db)
-    txns = await repo.get_transactions(user_id=target_id, limit=limit)
-    if not txns and user_id and user_id != target_id:
-        txns = await repo.get_transactions(user_id=user_id, limit=limit)
+    query = select(Transaction).where(
+        and_(
+            Transaction.user_id == target_id,
+            ~Transaction.id.like("TXN-INC-%")
+        )
+    ).order_by(Transaction.created_at.desc()).limit(limit)
+    res = await db.execute(query)
+    txns = list(res.scalars().all())
     if not txns:
-        # Fallback to recent transactions
-        txns = await repo.get_transactions(limit=limit)
+        repo = SyntheticRepository(db)
+        txns = await repo.get_transactions(user_id=target_id, limit=limit)
     return txns
+
 
 
 @router.get("/user/cases", response_model=List[SupportCaseResponse])

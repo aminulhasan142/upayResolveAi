@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { SupportCase, SyntheticTransaction, TransactionTimeline } from "@/types/synthetic";
 import { FinalInvestigationObject } from "@/types/resolveai";
+import { EventMetadataVisualizer } from "@/components/shared/event-metadata-visualizer";
 import { apiClient } from "@/lib/api-client";
 import { formatBDT } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -314,9 +315,9 @@ export const ResolveAIConsole: React.FC<ResolveAIConsoleProps> = ({
                               <span>Source: <strong className="text-gray-800">{evt.source}</strong></span>
                               <span>{evt.timestamp}</span>
                             </div>
-                            <p className="text-gray-800 font-sans text-xs mt-1">
-                              {evt.metadata ? JSON.stringify(evt.metadata) : "Milestone recorded by switch listener"}
-                            </p>
+                            <div className="mt-1">
+                              <EventMetadataVisualizer metadata={evt.metadata} />
+                            </div>
                           </div>
                         </div>
                       );

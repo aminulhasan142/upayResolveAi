@@ -28,6 +28,8 @@ import {
   Cpu
 } from "lucide-react";
 import { SyntheticTransaction, TransactionTimeline, TransactionEvent } from "@/types/synthetic";
+import { EventMetadataVisualizer } from "@/components/shared/event-metadata-visualizer";
+
 import { apiClient } from "@/lib/api-client";
 import { formatBDT } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -647,14 +649,8 @@ export const TransactionDetectiveView: React.FC<TransactionDetectiveViewProps> =
                     </div>
                   </div>
 
-                  <div className="p-3 bg-white rounded-xl border border-surface-border text-xs text-gray-800 font-mono overflow-x-auto">
-                    {evt.metadata ? (
-                      <pre className="text-[11px] text-gray-700">
-                        {JSON.stringify(evt.metadata, null, 2)}
-                      </pre>
-                    ) : (
-                      "Milestone logged by network socket dispatcher"
-                    )}
+                  <div className="pt-1">
+                    <EventMetadataVisualizer metadata={evt.metadata} />
                   </div>
                 </div>
               </div>

@@ -12,9 +12,10 @@ import {
   ShieldCheck, 
   AlertTriangle 
 } from "lucide-react";
-import { formatBDT, formatDate } from "@/lib/utils";
+import { formatBDT, formatDate, getTransactionTitle } from "@/lib/utils";
 import { SyntheticTransaction } from "@/types/synthetic";
 import { Badge } from "@/components/ui/badge";
+import { getEffectiveTransactions } from "@/lib/dummy-transactions";
 
 interface TransactionsViewProps {
   transactions: SyntheticTransaction[];
@@ -28,7 +29,9 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
   const [search, setSearch] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
 
-  const filtered = transactions.filter((tx) => {
+  const effectiveTransactions = getEffectiveTransactions(transactions);
+
+  const filtered = effectiveTransactions.filter((tx) => {
     const matchesSearch =
       tx.id.toLowerCase().includes(search.toLowerCase()) ||
       tx.type.toLowerCase().includes(search.toLowerCase()) ||
@@ -134,9 +137,7 @@ export const TransactionsView: React.FC<TransactionsViewProps> = ({
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2">
                       <h4 className="text-xs sm:text-sm font-extrabold text-gray-900 group-hover:text-upay-900 transition-colors">
-                        {tx.merchant_id === "MERCH-ABC-01" ? "ABC Cafe Banani" :
-                         tx.meta_info?.pos_counter ? "Shwapno Superstore Mirpur" :
-                         tx.type.replace(/_/g, " ")}
+                        {getTransactionTitle(tx)}
                       </h4>
                       <Badge
                         variant={

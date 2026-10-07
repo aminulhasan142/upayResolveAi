@@ -15,7 +15,7 @@ import {
   Receipt,
   Store
 } from "lucide-react";
-import { formatBDT, formatDate } from "@/lib/utils";
+import { formatBDT, formatDate, getTransactionTitle } from "@/lib/utils";
 import { SyntheticTransaction } from "@/types/synthetic";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -102,9 +102,7 @@ export const TransactionDetailModal: React.FC<TransactionDetailModalProps> = ({
             <span className="text-gray-500 font-medium">Merchant / Destination</span>
             <span className="font-bold text-gray-900 flex items-center gap-1">
               <Store className="w-3.5 h-3.5 text-upay-700" />
-              {transaction.merchant_id === "MERCH-ABC-01" ? "ABC Cafe Banani" :
-               transaction.meta_info?.pos_counter ? "Shwapno Superstore Mirpur" :
-               transaction.meta_info?.recipient_name || "MFS Recipient"}
+              {getTransactionTitle(transaction)}
             </span>
           </div>
 

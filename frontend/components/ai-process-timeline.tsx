@@ -25,6 +25,8 @@ import {
   Maximize2,
   Minimize2
 } from "lucide-react";
+import { EventMetadataVisualizer } from "@/components/shared/event-metadata-visualizer";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -668,20 +670,9 @@ export const AIProcessTimeline: React.FC<AIProcessTimelineProps> = ({
                     </div>
                   )}
 
-                  {/* Raw Diagnostic JSON Payload (collapsed-ready inspector) */}
                   {stage.details?.rawJson && (
-                    <div className="space-y-1.5 pt-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 font-mono">
-                          Raw Forensic Parser Artifacts
-                        </span>
-                        <span className="text-[10px] text-gray-400 font-mono">
-                          JSON Schema v2.4
-                        </span>
-                      </div>
-                      <pre className="p-3 bg-slate-900 text-emerald-300 rounded-xl text-[10px] font-mono overflow-x-auto max-h-36 leading-relaxed">
-                        {JSON.stringify(stage.details.rawJson, null, 2)}
-                      </pre>
+                    <div className="pt-2">
+                      <EventMetadataVisualizer metadata={stage.details.rawJson} />
                     </div>
                   )}
                 </div>

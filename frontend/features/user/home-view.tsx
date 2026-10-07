@@ -18,9 +18,10 @@ import {
   Receipt,
   Smartphone
 } from "lucide-react";
-import { formatBDT, formatDate } from "@/lib/utils";
+import { formatBDT, formatDate, getTransactionTitle } from "@/lib/utils";
 import { SyntheticTransaction, SupportCase } from "@/types/synthetic";
 import { Badge } from "@/components/ui/badge";
+import { getEffectiveTransactions } from "@/lib/dummy-transactions";
 
 interface HomeViewProps {
   balance: number;
@@ -56,7 +57,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
   // Active pending case for banner
   const activeCase = cases.find((c) => c.status === "OPEN" || c.status === "INVESTIGATING") || cases[0];
-  const recentTxns = transactions.slice(0, 4);
+
+  const sourceTxns = getEffectiveTransactions(transactions);
+  const recentTxns = sourceTxns.slice(0, 10);
+
+
 
   return (
     <div className="space-y-6">
@@ -241,9 +246,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   </div>
                   <div>
                     <h5 className="text-xs font-bold text-gray-900 flex items-center gap-1.5">
-                      {tx.meta_info?.pos_counter ? `Shwapno Superstore` :
-                       tx.merchant_id === "MERCH-ABC-01" ? "ABC Cafe" :
-                       tx.type.replace(/_/g, " ")}
+                      {getTransactionTitle(tx)}
                       {isPartialFail && (
                         <span className="text-[10px] px-1.5 py-0.2 rounded font-bold bg-amber-100 text-amber-800 border border-amber-200">
                           Disputed
